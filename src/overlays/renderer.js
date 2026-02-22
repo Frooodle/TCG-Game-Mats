@@ -16,8 +16,8 @@ const RIFTBOUND_1P_WITH_BATTLEFIELD = {
   gridRows: 3,
   rowHeights: [40, 30, 30],
   zones: [
-    { id: 'bf1',       name: 'Battlefield', icon: '⚔', colStart:  1, colSpan: 14, rowStart: 1, rowSpan: 1, locked: true, text: mkZoneText() },
-    { id: 'bf2',       name: 'Battlefield', icon: '⚔', colStart: 17, colSpan: 14, rowStart: 1, rowSpan: 1, locked: true, text: mkZoneText() },
+    { id: 'bf1',       name: 'Battlefield', icon: '⚔', colStart:  1, colSpan: 15, rowStart: 1, rowSpan: 1, locked: true, text: mkZoneText() },
+    { id: 'bf2',       name: 'Battlefield', icon: '⚔', colStart: 16, colSpan: 15, rowStart: 1, rowSpan: 1, locked: true, text: mkZoneText() },
     { id: 'champion',  name: 'Champion',    icon: '♟', colStart:  1, colSpan:  4, rowStart: 2, rowSpan: 1, locked: true, text: mkZoneText() },
     { id: 'legend',    name: 'Legend',      icon: '✦', colStart:  5, colSpan:  4, rowStart: 2, rowSpan: 1, locked: true, text: mkZoneText() },
     { id: 'base',      name: 'Base',        icon: '',  colStart:  9, colSpan: 18, rowStart: 2, rowSpan: 1, locked: true, text: mkZoneText() },
@@ -238,6 +238,156 @@ function corners(ctx, x, y, w, h, rounded) {
   ctx.stroke();
 }
 
+// ─── Enhanced border styles ───────────────────────────────────────────────
+
+function drawBorderDouble(ctx, x, y, w, h, rounded) {
+  const lineWidth = ctx.lineWidth;
+  const gap = lineWidth * 1.5;
+  const offset = gap + lineWidth;
+
+  // Outer border
+  if (rounded) {
+    rr(ctx, x, y, w, h, 14);
+  } else {
+    ctx.beginPath();
+    ctx.rect(x, y, w, h);
+  }
+  ctx.stroke();
+
+  // Inner border
+  const inset = offset + lineWidth / 2;
+  if (inset < Math.min(w, h) / 2) {
+    if (rounded) {
+      rr(ctx, x + inset, y + inset, w - inset * 2, h - inset * 2, 10);
+    } else {
+      ctx.beginPath();
+      ctx.rect(x + inset, y + inset, w - inset * 2, h - inset * 2);
+    }
+    ctx.stroke();
+  }
+}
+
+function drawBorderDashed(ctx, x, y, w, h, rounded) {
+  if (rounded) {
+    rr(ctx, x, y, w, h, 14);
+  } else {
+    ctx.beginPath();
+    ctx.rect(x, y, w, h);
+  }
+  ctx.setLineDash([8, 6]);
+  ctx.stroke();
+  ctx.setLineDash([]);
+}
+
+function drawBorderBrush(ctx, x, y, w, h, rounded) {
+  const oldLineWidth = ctx.lineWidth;
+  ctx.lineWidth = oldLineWidth * 1.5;
+  ctx.lineCap = 'round';
+  ctx.lineJoin = 'round';
+
+  if (rounded) {
+    rr(ctx, x, y, w, h, 14);
+  } else {
+    ctx.beginPath();
+    ctx.rect(x, y, w, h);
+  }
+
+  // Draw multiple times with slight offsets for brush effect
+  ctx.globalAlpha *= 0.6;
+  ctx.stroke();
+  ctx.globalAlpha /= 0.6;
+  ctx.stroke();
+
+  ctx.lineWidth = oldLineWidth;
+}
+
+function drawBorderGlow(ctx, x, y, w, h, rounded, applyGlow = true) {
+  const oldShadowBlur = ctx.shadowBlur;
+  const oldShadowColor = ctx.shadowColor;
+
+  if (applyGlow) {
+    // Draw glow effect
+    ctx.shadowBlur = 15;
+    ctx.shadowColor = ctx.strokeStyle;
+    ctx.globalAlpha *= 0.5;
+  }
+
+  if (rounded) {
+    rr(ctx, x, y, w, h, 14);
+  } else {
+    ctx.beginPath();
+    ctx.rect(x, y, w, h);
+  }
+  ctx.stroke();
+
+  if (applyGlow) {
+    // Reset and draw solid border
+    ctx.globalAlpha /= 0.5;
+    ctx.shadowBlur = 0;
+
+    if (rounded) {
+      rr(ctx, x, y, w, h, 14);
+    } else {
+      ctx.beginPath();
+      ctx.rect(x, y, w, h);
+    }
+    ctx.stroke();
+
+    ctx.shadowBlur = oldShadowBlur;
+    ctx.shadowColor = oldShadowColor;
+  }
+}
+
+function drawBorderNeoGlow(ctx, x, y, w, h, rounded) {
+  // Neon effect: bright with blur
+  const oldLineWidth = ctx.lineWidth;
+  ctx.lineWidth = oldLineWidth * 2;
+  ctx.shadowBlur = 20;
+  ctx.shadowColor = ctx.strokeStyle;
+  ctx.globalAlpha *= 0.8;
+
+  if (rounded) {
+    rr(ctx, x, y, w, h, 14);
+  } else {
+    ctx.beginPath();
+    ctx.rect(x, y, w, h);
+  }
+  ctx.stroke();
+
+  ctx.globalAlpha /= 0.8;
+  ctx.lineWidth = oldLineWidth;
+  ctx.shadowBlur = 0;
+}
+
+function drawBorderShadow(ctx, x, y, w, h, rounded, applyShadow = true) {
+  const oldShadowBlur = ctx.shadowBlur;
+  const oldShadowColor = ctx.shadowColor;
+  const oldShadowOffsetX = ctx.shadowOffsetX;
+  const oldShadowOffsetY = ctx.shadowOffsetY;
+
+  if (applyShadow) {
+    ctx.shadowBlur = 8;
+    ctx.shadowColor = 'rgba(0, 0, 0, 0.5)';
+    ctx.shadowOffsetX = 2;
+    ctx.shadowOffsetY = 2;
+  }
+
+  if (rounded) {
+    rr(ctx, x, y, w, h, 14);
+  } else {
+    ctx.beginPath();
+    ctx.rect(x, y, w, h);
+  }
+  ctx.stroke();
+
+  if (applyShadow) {
+    ctx.shadowBlur = oldShadowBlur;
+    ctx.shadowColor = oldShadowColor;
+    ctx.shadowOffsetX = oldShadowOffsetX;
+    ctx.shadowOffsetY = oldShadowOffsetY;
+  }
+}
+
 // When mirrored: apply extra scale(-1,1) then negate x so text reads correctly.
 function iconLabel(ctx, icon, name, x, y, w, h, iconSz, nameSz, showIcons, showNames, mirrored) {
   const effIcon = showIcons ? icon : '';
@@ -262,17 +412,155 @@ function iconLabel(ctx, icon, name, x, y, w, h, iconSz, nameSz, showIcons, showN
   ctx.restore();
 }
 
+// ─── Gradient system ──────────────────────────────────────────────────────────
+
+function createGradient(type, angle, startColor, endColor, matW, matH) {
+  if (type === 'solid') return null;
+  if (!matW || !matH || !isFinite(matW) || !isFinite(matH)) return null;
+
+  const centerX = matW / 2;
+  const centerY = matH / 2;
+
+  if (type === 'linear') {
+    const angleRad = (angle * Math.PI) / 180;
+    const dist = Math.sqrt(matW * matW + matH * matH) / 2;
+    const x1 = centerX - Math.cos(angleRad) * dist;
+    const y1 = centerY - Math.sin(angleRad) * dist;
+    const x2 = centerX + Math.cos(angleRad) * dist;
+    const y2 = centerY + Math.sin(angleRad) * dist;
+    return { type: 'linear', x1, y1, x2, y2, startColor, endColor };
+  }
+
+  if (type === 'radial') {
+    const maxDim = Math.max(matW, matH);
+    const r2 = isFinite(maxDim) ? maxDim / 2 : 500;
+    return { type: 'radial', x1: centerX, y1: centerY, r1: 0, x2: centerX, y2: centerY, r2, startColor, endColor };
+  }
+
+  if (type === 'conic') {
+    const angleRad = (angle * Math.PI) / 180;
+    return { type: 'conic', x: centerX, y: centerY, angle: angleRad, startColor, endColor };
+  }
+
+  return null;
+}
+
+function applyGradient(ctx, gradientConfig, matW, matH) {
+  if (!gradientConfig || gradientConfig.type === 'solid') return null;
+
+  try {
+    let gradient;
+
+    if (gradientConfig.type === 'linear') {
+      gradient = ctx.createLinearGradient(gradientConfig.x1, gradientConfig.y1, gradientConfig.x2, gradientConfig.y2);
+      gradient.addColorStop(0, gradientConfig.startColor);
+      gradient.addColorStop(1, gradientConfig.endColor);
+    } else if (gradientConfig.type === 'radial') {
+      const x1 = isFinite(gradientConfig.x1) ? gradientConfig.x1 : 0;
+      const y1 = isFinite(gradientConfig.y1) ? gradientConfig.y1 : 0;
+      const r1 = isFinite(gradientConfig.r1) ? gradientConfig.r1 : 0;
+      const x2 = isFinite(gradientConfig.x2) ? gradientConfig.x2 : 0;
+      const y2 = isFinite(gradientConfig.y2) ? gradientConfig.y2 : 0;
+      const r2 = isFinite(gradientConfig.r2) ? gradientConfig.r2 : 500;
+      gradient = ctx.createRadialGradient(x1, y1, r1, x2, y2, r2);
+      gradient.addColorStop(0, gradientConfig.startColor);
+      gradient.addColorStop(1, gradientConfig.endColor);
+    } else if (gradientConfig.type === 'conic') {
+      const angle = isFinite(gradientConfig.angle) ? gradientConfig.angle : 0;
+      const x = isFinite(gradientConfig.x) ? gradientConfig.x : 0;
+      const y = isFinite(gradientConfig.y) ? gradientConfig.y : 0;
+      gradient = ctx.createConicGradient(angle, x, y);
+      gradient.addColorStop(0, gradientConfig.startColor);
+      gradient.addColorStop(1, gradientConfig.endColor);
+    }
+
+    return gradient;
+  } catch (e) {
+    console.warn('Gradient creation failed:', e);
+    return null;
+  }
+}
+
 // ─── Zone primitive ───────────────────────────────────────────────────────────
 //
 // opts = { borderStyle, rounded, showIcons, showNames }
 
 function drawZonePrimitive(ctx, x, y, w, h, zone, opts, mirrored) {
-  const { borderStyle = 'full', rounded = true, showIcons = true, showNames = true } = opts;
+  const { borderStyle = 'full', rounded = true, showIcons = true, showNames = true, borderEffects = {}, zoneBackground = { enabled: true, opacity: 0.07, color: null }, overlayColor = '#c89b3c' } = opts;
   const { name = '', icon = '' } = zone;
   const isSmall = w < 400 && h < 500;
   const iconSz  = isSmall ? 42 : 56;
   const nameSz  = isSmall ? 26 : 34;
 
+  // Apply glow/shadow effects BEFORE drawing main border for proper layering
+  if (borderStyle !== 'none') {
+    if (borderEffects.glow) {
+      ctx.save();
+      ctx.shadowBlur = 12;
+      ctx.shadowColor = ctx.strokeStyle;
+      ctx.globalAlpha *= 0.5;
+
+      if (borderStyle === 'full') {
+        if (rounded) rr(ctx, x, y, w, h, 14);
+        else { ctx.beginPath(); ctx.rect(x, y, w, h); }
+        ctx.stroke();
+      } else if (borderStyle === 'corners') {
+        corners(ctx, x, y, w, h, rounded);
+      } else if (borderStyle === 'double') {
+        drawBorderDouble(ctx, x, y, w, h, rounded);
+      } else if (borderStyle === 'dashed') {
+        drawBorderDashed(ctx, x, y, w, h, rounded);
+      } else if (borderStyle === 'brush') {
+        drawBorderBrush(ctx, x, y, w, h, rounded);
+      }
+
+      ctx.restore();
+    }
+
+    if (borderEffects.shadow) {
+      ctx.save();
+      ctx.shadowBlur = 8;
+      ctx.shadowColor = 'rgba(0, 0, 0, 0.4)';
+      ctx.shadowOffsetX = 2;
+      ctx.shadowOffsetY = 2;
+      ctx.globalAlpha *= 0.6;
+
+      if (borderStyle === 'full') {
+        if (rounded) rr(ctx, x, y, w, h, 14);
+        else { ctx.beginPath(); ctx.rect(x, y, w, h); }
+        ctx.stroke();
+      } else if (borderStyle === 'corners') {
+        corners(ctx, x, y, w, h, rounded);
+      } else if (borderStyle === 'double') {
+        drawBorderDouble(ctx, x, y, w, h, rounded);
+      } else if (borderStyle === 'dashed') {
+        drawBorderDashed(ctx, x, y, w, h, rounded);
+      } else if (borderStyle === 'brush') {
+        drawBorderBrush(ctx, x, y, w, h, rounded);
+      }
+
+      ctx.restore();
+    }
+  }
+
+  // Draw zone background first (applies to all border styles except 'none')
+  if (zoneBackground.enabled && borderStyle !== 'none') {
+    ctx.save();
+    ctx.fillStyle = zoneBackground.color || overlayColor;
+    ctx.globalAlpha = zoneBackground.opacity;
+
+    // Draw background rectangle for all border styles
+    if (rounded) {
+      rr(ctx, x, y, w, h, 14);
+    } else {
+      ctx.beginPath();
+      ctx.rect(x, y, w, h);
+    }
+    ctx.fill();
+    ctx.restore();
+  }
+
+  // Now draw the main border
   if (borderStyle === 'full') {
     if (rounded) {
       rr(ctx, x, y, w, h, 14);
@@ -280,10 +568,15 @@ function drawZonePrimitive(ctx, x, y, w, h, zone, opts, mirrored) {
       ctx.beginPath();
       ctx.rect(x, y, w, h);
     }
-    ctx.save(); ctx.globalAlpha = 0.07; ctx.fill(); ctx.restore();
     ctx.stroke();
   } else if (borderStyle === 'corners') {
     corners(ctx, x, y, w, h, rounded);
+  } else if (borderStyle === 'double') {
+    drawBorderDouble(ctx, x, y, w, h, rounded);
+  } else if (borderStyle === 'dashed') {
+    drawBorderDashed(ctx, x, y, w, h, rounded);
+  } else if (borderStyle === 'brush') {
+    drawBorderBrush(ctx, x, y, w, h, rounded);
   }
   // 'none' → no border drawn
 
@@ -433,6 +726,72 @@ function clamp01(v) {
   return Math.max(0, Math.min(1, v));
 }
 
+// ─── Points style rendering ───────────────────────────────────────────────────
+
+function drawPointShape(ctx, pointsStyle, x, y, r, label) {
+  const { shape = 'circle', filled = true } = pointsStyle;
+
+  const drawLabel = () => {
+    ctx.save();
+    ctx.font = `bold ${Math.round(r * 0.9)}px 'Funnel Sans','Inter',system-ui,sans-serif`;
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+
+    // Use white text for better contrast on colored backgrounds
+    ctx.fillStyle = '#ffffff';
+    ctx.globalAlpha = 0.95;
+    // Draw text with dark outline for extra visibility
+    ctx.strokeStyle = 'rgba(0, 0, 0, 0.5)';
+    ctx.lineWidth = Math.max(1, r * 0.15);
+    ctx.lineJoin = 'round';
+    const label_str = String(label);
+    // Draw outline
+    ctx.strokeText(label_str, x, y);
+    // Draw filled text
+    ctx.fillText(label_str, x, y);
+    ctx.restore();
+  };
+
+  ctx.save();
+
+  // Draw shape based on selection
+  if (shape === 'circle') {
+    ctx.beginPath();
+    ctx.arc(x, y, r, 0, Math.PI * 2);
+    if (filled) ctx.fill();
+    ctx.stroke();
+  } else if (shape === 'square') {
+    ctx.beginPath();
+    ctx.rect(x - r, y - r, r * 2, r * 2);
+    if (filled) ctx.fill();
+    ctx.stroke();
+  } else if (shape === 'diamond') {
+    ctx.beginPath();
+    ctx.moveTo(x, y - r);
+    ctx.lineTo(x + r, y);
+    ctx.lineTo(x, y + r);
+    ctx.lineTo(x - r, y);
+    ctx.closePath();
+    if (filled) ctx.fill();
+    ctx.stroke();
+  } else if (shape === 'hexagon') {
+    ctx.beginPath();
+    for (let i = 0; i < 6; i++) {
+      const angle = (Math.PI / 3) * i - Math.PI / 2;
+      const px = x + Math.cos(angle) * r;
+      const py = y + Math.sin(angle) * r;
+      if (i === 0) ctx.moveTo(px, py);
+      else ctx.lineTo(px, py);
+    }
+    ctx.closePath();
+    if (filled) ctx.fill();
+    ctx.stroke();
+  }
+
+  drawLabel();
+  ctx.restore();
+}
+
 // ─── Score track ──────────────────────────────────────────────────────────────
 
 function drawScoreTrack(ctx, scoreTrack, mirrored, matSize, options = {}) {
@@ -451,6 +810,7 @@ function drawScoreTrack(ctx, scoreTrack, mirrored, matSize, options = {}) {
     edgeRunnerXShift = 0,
     orbScale = 1,
   } = scoreTrack;
+  const pointsStyle = options.pointsStyle || 'circle';
   const edgeInset = options.edgeRunner?.enabled ? (options.edgeRunner.inset ?? 18) : 0;
   const sideInnerPad = 30 + SIDE_SCORE_PAD;
   const sideLane = (side) => {
@@ -479,22 +839,37 @@ function drawScoreTrack(ctx, scoreTrack, mirrored, matSize, options = {}) {
   const drawOrb = (ox, oy, label) => {
     const baseR = Math.max(11, Math.min(SCORE_R_MAX, 26 * (orbScale || 1)));
     const r = Math.max(11, Math.min(SCORE_R_MAX, baseR));
-    ctx.beginPath();
-    ctx.arc(ox, oy, r, 0, Math.PI * 2);
-    ctx.save(); ctx.globalAlpha = 0.12; ctx.fill(); ctx.restore();
-    ctx.stroke();
+
     ctx.save();
-    ctx.font = `bold ${Math.round(r * 0.9)}px 'Funnel Sans','Inter',system-ui,sans-serif`;
-    ctx.textAlign = 'center';
-    ctx.textBaseline = 'middle';
-    ctx.globalAlpha = 0.85;
+
+    // Draw background fill (minimal opacity) for filled style
+    if (pointsStyle.filled) {
+      ctx.globalAlpha = 0.12;
+      if (pointsStyle.shape === 'circle') {
+        ctx.beginPath();
+        ctx.arc(ox, oy, r, 0, Math.PI * 2);
+        ctx.fill();
+      }
+      ctx.globalAlpha = 1;
+    }
+
+    // Apply rotation for upsideDown
     if (upsideDown) {
       ctx.translate(ox, oy);
       ctx.rotate(Math.PI);
       ctx.translate(-ox, -oy);
     }
-    if (mirrored) { ctx.scale(-1, 1); ctx.fillText(String(label), -ox, oy); }
-    else ctx.fillText(String(label), ox, oy);
+
+    // Apply mirroring
+    if (mirrored) {
+      ctx.translate(ox, oy);
+      ctx.scale(-1, 1);
+      ctx.translate(-ox, -oy);
+    }
+
+    // Draw shape using pointsStyle
+    drawPointShape(ctx, pointsStyle, ox, oy, r, label);
+
     ctx.restore();
   };
 
@@ -683,7 +1058,7 @@ function drawLayout(ctx, config, options) {
     rowYStarts = Array.from({ length: gridRows }, (_, i) => areaY + i * cellH);
   }
 
-  const zoneOpts = { borderStyle, rounded, showIcons, showNames };
+  const zoneOpts = { borderStyle, rounded, showIcons, showNames, borderEffects: options.borderEffects, zoneBackground: options.zoneBackground, overlayColor: options.overlayColor };
 
   const sideForTrack = (track) => {
     if (!track || (track.position !== 'left' && track.position !== 'right')) return null;
@@ -737,17 +1112,20 @@ function drawLayout(ctx, config, options) {
 // drawOverlay(ctx, color, config, options)
 //
 // options = { borderStyle, rounded, showNames, showIcons, giantTextEnabled, mirrored,
-//             zoneGap, edgeRunner: { enabled, inset, pointed } }
+//             zoneGap, edgeRunner: { enabled, inset, pointed }, gradientConfig,
+//             pointsStyle: { shape, filled }, borderEffects: { glow, shadow } }
 
 export function drawOverlay(ctx, color, config, options = {}) {
   const matSize = getMatSize(config);
   ctx.clearRect(0, 0, matSize.width, matSize.height);
   ctx.save();
 
-  const { mirrored = false } = options;
+  const { mirrored = false, gradientConfig = null } = options;
 
-  ctx.strokeStyle = color;
-  ctx.fillStyle   = color;
+  // Apply gradient or solid color
+  const gradient = applyGradient(ctx, gradientConfig, matSize.width, matSize.height);
+  ctx.strokeStyle = gradient || color;
+  ctx.fillStyle   = gradient || color;
   ctx.lineWidth   = 3;
   ctx.lineJoin    = 'round';
   ctx.lineCap     = 'round';
