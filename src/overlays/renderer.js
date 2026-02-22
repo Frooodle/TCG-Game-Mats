@@ -1034,6 +1034,9 @@ function drawLayout(ctx, config, options) {
     giantTextEnabled = true,
     mirrored        = false,
     zoneGap         = 20,
+    borderEffects   = { glow: false, shadow: false },
+    zoneBackground  = { enabled: true, opacity: 0.07, color: null },
+    overlayColor    = '#c89b3c',
   } = options;
 
   const tracks = Array.isArray(scoreTracks) && scoreTracks.length > 0
@@ -1058,7 +1061,7 @@ function drawLayout(ctx, config, options) {
     rowYStarts = Array.from({ length: gridRows }, (_, i) => areaY + i * cellH);
   }
 
-  const zoneOpts = { borderStyle, rounded, showIcons, showNames, borderEffects: options.borderEffects, zoneBackground: options.zoneBackground, overlayColor: options.overlayColor };
+  const zoneOpts = { borderStyle, rounded, showIcons, showNames, borderEffects, zoneBackground, overlayColor };
 
   const sideForTrack = (track) => {
     if (!track || (track.position !== 'left' && track.position !== 'right')) return null;

@@ -15,6 +15,12 @@ export default function App() {
   const [config,       setConfig]       = useState(() => getRiftboundPreset('1p-with-battlefield'));
   const [overlayColor,    setOverlayColor]    = useState('#c89b3c');
   const [overlayOpacity,  setOverlayOpacity]  = useState(0.85);
+  const [overlayGradient, setOverlayGradient] = useState({
+    enabled: false,
+    type: 'linear', // 'linear' | 'radial' | 'conic'
+    angle: 0,
+    color2: '#ffffff',
+  });
   const [showOverlay,     setShowOverlay]     = useState(true);
   const [borderStyle,     setBorderStyle]     = useState('full');   // 'full' | 'corners' | 'none'
   const [overlayRounded,  setOverlayRounded]  = useState(true);
@@ -30,13 +36,36 @@ export default function App() {
   const [fadeOpacity,  setFadeOpacity]  = useState(0.4);
   const [isDragging,   setIsDragging]   = useState(false);
   const [isExporting,  setIsExporting]  = useState(false);
+  const [pointsStyle, setPointsStyle] = useState({
+    shape: 'circle', // 'circle' | 'square' | 'diamond' | 'hexagon'
+    filled: true,    // true = filled, false = outline only
+  });
+  const [borderEffects, setBorderEffects] = useState({
+    glow: false,
+    shadow: false,
+  });
+  const [zoneBackground, setZoneBackground] = useState({
+    enabled: true,
+    opacity: 0.07,
+    color: null, // null = use overlay color
+  });
 
   const canvasRef = useRef(null);
 
   // ── Memoised overlay options ──────────────────────────────────────────────
+  const gradientConfig = useMemo(() => {
+    if (!overlayGradient.enabled) return { type: 'solid' };
+    return {
+      type: overlayGradient.type,
+      angle: overlayGradient.angle,
+      startColor: overlayColor,
+      endColor: overlayGradient.color2,
+    };
+  }, [overlayGradient, overlayColor]);
+
   const overlayOptions = useMemo(
-    () => ({ borderStyle, rounded: overlayRounded, showNames, showIcons, giantTextEnabled, mirrored: overlayMirrored, zoneGap, edgeRunner }),
-    [borderStyle, overlayRounded, showNames, showIcons, giantTextEnabled, overlayMirrored, zoneGap, edgeRunner]
+    () => ({ borderStyle, rounded: overlayRounded, showNames, showIcons, giantTextEnabled, mirrored: overlayMirrored, zoneGap, edgeRunner, gradientConfig, pointsStyle, borderEffects, zoneBackground, overlayColor }),
+    [borderStyle, overlayRounded, showNames, showIcons, giantTextEnabled, overlayMirrored, zoneGap, edgeRunner, gradientConfig, pointsStyle, borderEffects, zoneBackground, overlayColor]
   );
 
   // ── Mode switching ────────────────────────────────────────────────────────
@@ -177,6 +206,14 @@ export default function App() {
           onOverlayOpacityChange={setOverlayOpacity}
           showOverlay={showOverlay}
           onShowOverlayChange={setShowOverlay}
+          overlayGradient={overlayGradient}
+          onOverlayGradientChange={setOverlayGradient}
+          pointsStyle={pointsStyle}
+          onPointsStyleChange={setPointsStyle}
+          borderEffects={borderEffects}
+          onBorderEffectsChange={setBorderEffects}
+          zoneBackground={zoneBackground}
+          onZoneBackgroundChange={setZoneBackground}
           activeTool={activeTool}
           onActiveToolChange={setActiveTool}
           brushSize={brushSize}
