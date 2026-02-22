@@ -1,0 +1,219 @@
+/* ─── Icon Selector Component ─────────────────────────────────────────────── */
+
+.icon-selector {
+  position: relative;
+  width: 100%;
+}
+
+.icon-selector-trigger {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  aspect-ratio: 1 / 0.8;
+  min-height: 2.2rem;
+  padding: 0.35rem;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 0.375rem;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  font-size: 1.4rem;
+  line-height: 1;
+  color: var(--text);
+}
+
+.icon-selector-trigger:hover {
+  background: var(--input-bg-hover);
+  border-color: var(--gold);
+}
+
+.icon-selector-trigger:active {
+  background: var(--input-bg-focus);
+  border-color: var(--gold);
+  transform: scale(0.98);
+}
+
+.icon-display {
+  display: block;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 1.5rem;
+}
+
+/* ─── Backdrop ────────────────────────────────────────────────────────────── */
+
+.icon-selector-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 9998;
+}
+
+/* ─── Dropdown Menu ───────────────────────────────────────────────────────── */
+
+.icon-selector-menu {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 0.5rem;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.5), 0 2px 8px rgba(0, 0, 0, 0.3);
+  padding: 0.65rem;
+  width: 320px;
+  max-height: 420px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(200, 155, 60, 0.2) transparent;
+}
+
+.icon-selector-menu::-webkit-scrollbar {
+  width: 6px;
+}
+
+.icon-selector-menu::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.icon-selector-menu::-webkit-scrollbar-thumb {
+  background: rgba(200, 155, 60, 0.2);
+  border-radius: 3px;
+}
+
+.icon-selector-menu::-webkit-scrollbar-thumb:hover {
+  background: rgba(200, 155, 60, 0.4);
+}
+
+.icon-menu-section {
+  margin-bottom: 0.65rem;
+}
+
+.icon-menu-section:last-child {
+  margin-bottom: 0;
+}
+
+.icon-menu-label {
+  font-size: 0.68rem;
+  font-weight: 700;
+  color: var(--gold);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 0.45rem;
+  padding: 0 0.25rem;
+}
+
+/* ─── Icon Grid ───────────────────────────────────────────────────────────── */
+
+.icon-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(2.8rem, 1fr));
+  gap: 0.4rem;
+}
+
+.icon-option {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  aspect-ratio: 1;
+  padding: 0;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 0.35rem;
+  cursor: pointer;
+  transition: all 0.12s ease;
+  font-size: 1.35rem;
+  line-height: 1;
+  color: var(--text);
+  min-height: 2.6rem;
+}
+
+.icon-option:hover {
+  background: var(--input-bg-hover);
+  border-color: var(--gold);
+  transform: translateY(-2px);
+}
+
+.icon-option.active {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+  box-shadow: 0 0 12px rgba(123, 94, 167, 0.4);
+}
+
+.icon-opt-display {
+  display: block;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  word-break: break-all;
+}
+
+/* ─── Custom Text Input ───────────────────────────────────────────────────── */
+
+.icon-custom-input {
+  width: 100%;
+  padding: 0.45rem 0.65rem;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 0.3rem;
+  color: var(--text);
+  font-size: 0.9rem;
+  font-family: inherit;
+  font-weight: 500;
+  text-align: center;
+  transition: all 0.15s ease;
+}
+
+.icon-custom-input:focus {
+  outline: none;
+  border-color: var(--gold);
+  background: var(--input-bg-focus);
+  box-shadow: 0 0 8px rgba(200, 155, 60, 0.2);
+}
+
+.icon-custom-input::placeholder {
+  color: var(--text-dim);
+}
+
+/* ─── Upload Button ───────────────────────────────────────────────────────── */
+
+.icon-upload-btn {
+  width: 100%;
+  padding: 0.45rem 0.65rem;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 0.3rem;
+  color: var(--text);
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.icon-upload-btn:hover {
+  background: var(--input-bg-hover);
+  border-color: var(--gold);
+  color: var(--gold);
+}
+
+.icon-upload-btn:active {
+  transform: scale(0.98);
+}
+
+/* ─── Responsive ──────────────────────────────────────────────────────────── */
+
+@media (max-width: 600px) {
+  .icon-selector-menu {
+    width: calc(100vw - 2rem);
+    max-width: 300px;
+  }
+
+  .icon-grid {
+    grid-template-columns: repeat(auto-fill, minmax(2.4rem, 1fr));
+  }
+}

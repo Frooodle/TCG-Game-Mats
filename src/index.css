@@ -12,8 +12,14 @@
   --gold-dim:  #a07e2e;
   --text:      #ddd8c8;
   --text-dim:  #7a7568;
+  --text-secondary: #7a7568;
   --accent:    #7b5ea7;
+  --accent-dark: #6b4e97;
   --danger:    #c84b3c;
+
+  --input-bg:        #1c1c2e;
+  --input-bg-hover:  #242435;
+  --input-bg-focus:  #1a1a28;
 
   font-family: 'Funnel Sans', 'Inter', system-ui, sans-serif;
   font-size: 15px;

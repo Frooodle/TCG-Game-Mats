@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { MirroredLayoutSync, clamp } from '../domain/layoutSync';
+import IconSelector from './IconSelector';
 
 function newZone(id) {
   return { id, name: '', icon: '', colStart: 1, colSpan: 1, rowStart: 1, rowSpan: 1, text: { content: '', align: 'center', valign: 'middle', color: '', enabled: false, fontSize: 0 } };
@@ -227,9 +228,11 @@ export default function CustomEditor({ config, onChange, isRiftbound }) {
                         </div>
                         <div className="zone-field zone-f-icon">
                           <label className="field-label">Icon</label>
-                          <input type="text" value={z.icon}
-                            onChange={(e) => patchZone(z.id, { icon: e.target.value })}
-                            placeholder="⚔" className="zone-input" maxLength={2} />
+                          <IconSelector
+                            value={z.icon}
+                            onChange={(icon) => patchZone(z.id, { icon })}
+                            zones={zones}
+                          />
                         </div>
                       </div>
 
