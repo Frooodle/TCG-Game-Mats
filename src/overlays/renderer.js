@@ -165,7 +165,7 @@ const RIFTBOUND_2P_BATTLEFIELD_ALT_2 = {
       startValue: 8,
       x: 1020,
       yStart: 0.41,
-      yEnd: 0.41,
+      yEnd: 0.59,
       orbScale: 1.5,
     },
   ],
