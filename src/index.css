@@ -1,0 +1,32 @@
+@import url('https://fonts.googleapis.com/css2?family=Funnel+Sans:wght@400;500;600;700&display=swap');
+
+/* ── Reset / Base ─────────────────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg:        #0b0b13;
+  --bg2:       #13131f;
+  --bg3:       #1c1c2e;
+  --border:    rgba(255,255,255,0.08);
+  --gold:      #c89b3c;
+  --gold-dim:  #a07e2e;
+  --text:      #ddd8c8;
+  --text-dim:  #7a7568;
+  --accent:    #7b5ea7;
+  --danger:    #c84b3c;
+
+  font-family: 'Funnel Sans', 'Inter', system-ui, sans-serif;
+  font-size: 15px;
+  line-height: 1.5;
+  color: var(--text);
+  background: var(--bg);
+  -webkit-font-smoothing: antialiased;
+}
+
+html, body, #root {
+  height: 100%;
+  overflow: hidden;
+}
+
+button { font-family: inherit; cursor: pointer; border: none; }
+input, textarea, select { font-family: inherit; }
