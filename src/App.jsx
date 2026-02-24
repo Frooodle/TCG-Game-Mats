@@ -55,7 +55,7 @@ export default function App() {
 
   // ── SEO Meta Tags ─────────────────────────────────────────────────────────
   useSEO({
-    title: 'TCG Game Mats — Free Riftbound Playmat Designer',
+    title: 'TCG Game Mats - Free Online Riftbound Playmat Designer',
     description: 'Design custom Riftbound and TCG playmat overlays. Customize zones, colors, borders, and more for League of Legends TCG mats.',
   });
 

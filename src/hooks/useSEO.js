@@ -6,7 +6,7 @@ import { useEffect } from 'react';
  */
 export function useSEO(config = {}) {
   const {
-    title = 'TCG Game Mats — Free Riftbound Playmat Designer',
+    title = 'TCG Game Mats - Free Online Riftbound Playmat Designer',
     description = 'Design custom Riftbound and TCG playmat overlays with our free online designer.',
   } = config;
 
