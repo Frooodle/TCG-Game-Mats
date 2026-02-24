@@ -35,13 +35,3 @@ export function useSEO(config = {}) {
     if (twitterDesc) twitterDesc.setAttribute('content', description);
   }, [title, description]);
 }
-
-/**
- * Component to render structured data (JSON-LD)
- * Pass an object to render as JSON-LD script tag
- */
-export function StructuredData({ data }) {
-  return (
-    <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(data) }} />
-  );
-}
