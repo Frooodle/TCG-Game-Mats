@@ -633,6 +633,11 @@ export default function Sidebar({
       <footer className="sidebar-footer">
         <p>Stirling Mats — unofficial Riftbound mat designer</p>
         <p>Not affiliated with Riot Games</p>
+        <p>
+          <a href="https://github.com/Frooodle/TCG-Game-Mats" target="_blank" rel="noopener noreferrer" style={{ color: '#c89b3c', textDecoration: 'none' }}>
+            GitHub →
+          </a>
+        </p>
       </footer>
     </aside>
   );

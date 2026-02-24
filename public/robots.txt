@@ -1,0 +1,15 @@
+# TCG Game Mats - SEO Robots Configuration
+# Allow all search engines to crawl the site
+User-agent: *
+Allow: /
+Disallow:
+
+# Specific rules for Googlebot
+User-agent: Googlebot
+Allow: /
+
+# Sitemap location
+Sitemap: https://www.tcggamemats.com/sitemap.xml
+
+# Crawl-delay (optional - allow aggressive crawling)
+# Crawl-delay: 0

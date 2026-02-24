@@ -4,6 +4,7 @@ import OverlayCanvas, { TOOLS } from './components/OverlayCanvas';
 import Sidebar from './components/Sidebar';
 import { DEFAULT_CUSTOM_CONFIG, getMatSize, getRiftboundPreset } from './overlays/renderer';
 import { RulesConfigBuilder } from './domain/rules';
+import { useSEO } from './hooks/useSEO';
 import './App.css';
 
 export default function App() {
@@ -51,6 +52,12 @@ export default function App() {
   });
 
   const canvasRef = useRef(null);
+
+  // ── SEO Meta Tags ─────────────────────────────────────────────────────────
+  useSEO({
+    title: 'TCG Game Mats — Free Riftbound Playmat Designer',
+    description: 'Design custom Riftbound and TCG playmat overlays. Customize zones, colors, borders, and more for League of Legends TCG mats.',
+  });
 
   // ── Memoised overlay options ──────────────────────────────────────────────
   const gradientConfig = useMemo(() => {
@@ -154,6 +161,11 @@ export default function App() {
 
   return (
     <div className="app">
+      {/* ── Semantic Heading for SEO ───────────────────────────────────── */}
+      <h1 style={{ position: 'absolute', left: '-9999px', top: '-9999px' }}>
+        TCG Game Mats — Free Riftbound Playmat Designer
+      </h1>
+
       {/* ── Header ─────────────────────────────────────────────────────── */}
       <header className="app-header">
         <div className="app-logo">
